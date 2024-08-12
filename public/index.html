@@ -1,0 +1,134 @@
+<html>
+    <head>
+        <title>Credit Union Application</title>
+        <style>
+            /* body{
+                font-family: Arial;
+                background-color: blue;
+                margin:0;
+                padding:20 px;
+            } */
+
+            .container{
+                max-width:600px;
+                margin: 0;
+                background:#fff;
+                padding:20 px;
+                border-radius:10 px;
+                box-shadow: 0 0 10px rgba(0,0,0,0.1);
+
+            }
+            /* h1{
+                text-align:center;
+                color:blue;
+            } */
+
+            .filters, .profile{
+                display: block;
+                margin: 20px;
+            }
+            .filters label, .filters select, .profile img {
+                display: block;
+                margin: 15px 0;
+                width: 100%;
+
+            }
+
+            .profile img{
+                max-width:100%;
+                border-radius: 40%;
+            }
+
+            /* .loan-offer{
+                background-color: blue;
+                padding: 10px;
+                border-radius: 5px;
+                margin-top: 20px;
+                text-align: center;
+            } */
+
+            button{
+                width:100%;
+                padding:15px;
+                color:blueviolet;
+                font-size: 14px;
+
+            }
+
+
+        </style>
+    </head>
+
+    <body>
+  
+        <div class="container">
+            <h1> Random user profile</h1>
+
+            <div class="filters">
+                <label for="gender">Gender</label>
+                <select id="gender">
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                    <option value="">other</option>
+                </select>
+
+                <label for="nationality">nationality</label>
+
+                <select id="nationality">
+                    <option value="">Any</option>
+                    <option value="US">US</option>
+                    <option value="GB">GB</option>
+                    <option value="AU">AU</option>
+                </select>
+
+                <button onclick="getRandomUser()">Get Random User</button>
+            </div>
+
+            <div class="profile">
+
+                <img id="user-image" src="" alt="userimage">
+
+                <p><strong>
+                    Name: <span id="user-name"></span>
+                </strong></p>
+                <p><strong>Age:</strong><span id="user-age"></span></p>
+                <p><strong>Location:</strong><span id="user-location"></span></p>
+                <p><strong>nationality:</strong><span id="user-nationality"></span></p>
+                <p><strong>Email:</strong><span id="user-email"></span></p>
+
+            </div>
+
+                <div class="loan-offer">
+                    <p id="loan-offer"></p>
+                </div>
+        </div>
+
+
+        <script>
+            async function getRandomUser(){
+                const gender=document.getElementById('gender').value;
+                console.log(gender);
+                const nationality=document.getElementById('nationality').value;
+
+                const response=await fetch(`http://localhost:3003/api/random-user?gender=${gender}&nationality=${nationality}`); //write after backend steup done.
+                const data=await response.json();
+
+                if(data.error){
+                    alert(data.error);
+                    return;
+                }
+
+                document.getElementById('user-image').src=data.picture;
+                document.getElementById('user-name').innerText=`${data.name.first} ${data.name.last}`;
+                document.getElementById('user-age').innerText= data.age;
+                document.getElementById('user-location').innerText= `${data.location.city}, ${data.location.country}`;
+                document.getElementById('user-email').innerText= data.email;
+                document.getElementById('user-nationality').innerText= data.nat;
+
+                document.getElementById('loan-offer').innerText= data.loanOffer;
+
+
+            }
+        </script>
+    </body>
+</htm>
